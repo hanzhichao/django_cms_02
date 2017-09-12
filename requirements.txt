@@ -1,2 +1,4 @@
 Django==1.8.3
 markdown
+DjangoUeditor
+bootstrap-admin==0.3.7.1

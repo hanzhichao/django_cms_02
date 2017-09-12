@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from markdown import markdown
 from django.contrib import admin
+from DjangoUeditor.models import UEditorField
 
 VIEWABLE_STATUS = [3, 4]
 
@@ -44,8 +45,11 @@ class Article(models.Model):
     title = models.CharField('标题', max_length=256)
     slug = models.SlugField('网址', max_length=256, db_index=True)  # 建立数据库索引
     category = models.ForeignKey(Category)
-    markdown_content = models.TextField()
-    html_content = models.TextField(editable=False)  # invisible
+    markdown_content = models.TextField('Markdown内容',blank=True)
+    # html_content = models.TextField(editable=False)  # invisible
+    html_content = UEditorField('Html内容', height=300, width=940,
+        default=u'', blank=True, imagePath="uploads/images/",
+        toolbars='besttome', filePath='uploads/files/')
     # author = models.ForeignKey(User, blank=True, null=True)
     author = models.ForeignKey('auth.User', blank=True, null=True, verbose_name='作者')
     status = models.IntegerField('状态', choices=STATUS_CHOICES, default=1)
@@ -68,8 +72,9 @@ class Article(models.Model):
     #     return self.title
 
     def save(self, *args, **kws):  # 转换markdown内容为html内容
-        self.html_content = markdown(self.markdown_content)
-        self.modified = datetime.datetime.now()
+        if self.markdown_content:  # 如果Markdown有内容则覆盖html内容
+            self.html_content = markdown(self.markdown_content)
+            self.modified = datetime.datetime.now()
         super(Article, self).save()
 
 

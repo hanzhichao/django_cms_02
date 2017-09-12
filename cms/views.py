@@ -2,6 +2,7 @@
 from cms.models import Article, Category
 from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q
+from django.http.response import HttpResponse
 
 
 def home(request):  # catrgory list
@@ -36,4 +37,10 @@ def search(request):
         heading = "Search results"
 
     return render_to_response("cms/category.html", locals())
+
+
+def test(requset, slug, slug2):
+    cur_category = get_object_or_404(Category, slug=slug)
+    cur_article = get_object_or_404(Article, category=cur_category, slug=slug2)
+    return HttpResponse(cur_article.title)
 
