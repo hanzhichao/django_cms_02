@@ -1,0 +1,29 @@
+{% extends "cms/base.html" %}
+{% block title %}{{ story.title }}{% endblock %}
+{% block content %}
+    {% if heading %}
+        <h1>{{ heading }}</h1>
+    {% endif %}
+    <div class="jumbotron">
+        <h1>Welcome,Friend</h1>
+        <p>
+           This is a simple hero unit,
+            a simple jumbotron-style component for calling extra attention
+            to featured content or information.
+        </p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+    </div>
+    <div class="page-header">
+        <h1>首页<small>（分类列表）</small></h1>
+    </div>
+    <ol class="breadcrumb">
+    <li><a href="{% url 'cms-home' %}">首页</a> </li>
+</ol>
+    <div class="page">
+         <ul>
+        {% for category in categories %}
+            <li><a href="{{ category.get_absolute_url }}">{{ category.label }}</a> </li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endblock %}

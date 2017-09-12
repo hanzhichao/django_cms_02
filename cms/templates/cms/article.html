@@ -1,0 +1,16 @@
+{% extends "cms/base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>{{ cur_article.title }}</h1>
+</div>
+<ol class="breadcrumb">
+    <li><a href="{% url 'cms-home' %}">首页</a> </li>
+    <li><a href="{% url 'cms-category' cur_article.category.slug %}">{{ cur_article.category }}</a> </li>
+    <li><a href="{{ cur_article.get_absolute_url }}">{{ cur_article.title }}</a> </li>
+</ol>
+<div class="page">
+    {{ cur_article.html_content|safe }}
+    <p class="small">最后更新： {{ cur_article.modified }}</p>
+</div>
+{% endblock %}

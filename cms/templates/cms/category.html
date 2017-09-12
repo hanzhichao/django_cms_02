@@ -1,0 +1,20 @@
+{% extends "cms/base.html" %}
+{% block title %}{{ story.title }}{% endblock %}
+{% block content %}
+    {% if heading %}
+        <div class="page-header">
+        <h1>{{ heading }}</h1>
+        </div>
+    {% endif %}
+<ol class="breadcrumb">
+<li><a href="{% url 'cms-home' %}">首页</a> </li>
+<li><a href="{{ cur_category.get_absolute_url }}">{{ cur_category }}</a> </li>
+</ol>
+<div class="page">
+    <ul>
+        {% for article in article_list %}
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a> </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
