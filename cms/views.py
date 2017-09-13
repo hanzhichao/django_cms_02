@@ -1,9 +1,16 @@
 # coding=utf-8
 from cms.models import Article, Category
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404,render
 from django.db.models import Q
 from django.http.response import HttpResponse
+import os
+from django.template.loader import render_to_string
+import sys
+import logging
 
+
+reload(sys)
+sys.setdefaultencoding("utf8")
 
 def home(request):  # catrgory list
     categories = Category.objects.all()
@@ -22,7 +29,18 @@ def category(request, slug):  # article list
 def article(request, slug):  # article detail # 怎么设计的不同分类可重复？
     categories = Category.objects.all()
     cur_article = get_object_or_404(Article, slug=slug)
-    return render_to_response("cms/article.html", locals())  # 返回所有本地变量
+    # return render_to_response("cms/article.html", locals())  # 返回所有本地变量
+
+    static_html = 'static_html/' + slug + '.html'
+
+    logging.warning(os.path.abspath(static_html))
+
+    if not os.path.exists(static_html):
+        logging.warning("not exist")
+        content = render_to_string('cms/article.html', locals())
+        with open(static_html, 'w') as static_file:
+            static_file.write(content)
+    return render(request, static_html)
 
 
 def search(request):
